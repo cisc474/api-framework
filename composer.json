@@ -1,0 +1,24 @@
+{
+    "name": "martinbean/api-framework",
+    "description": "A simple frameworking for starting RESTful APIs.",
+    "version": "2.0.0",
+    "type": "library",
+    "keywords": ["api", "rest", "framework"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Bean",
+            "email": "martin@martinbean.co.uk"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/martinbean/api-framework/issues",
+        "source": "https://github.com/martinbean/api-framework"
+    },
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "MCB\\Api\\Framework\\": "src/"
+        }
+    }
+}
