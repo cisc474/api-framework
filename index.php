@@ -1,4 +1,17 @@
 <?php
+
+/*
+ANDY:
+Some headers that allow cross domain requests, credentials, and a good set of API verbs.
+*/
+header("Access-Control-Allow-Origin: " . $_SERVER["HTTP_ORIGIN"]);
+header("Access-Control-Allow-Headers: X-Requested-With, X-Authorization, Content-Type, X-HTTP-Method-Override");
+header("Access-Control-Allow-Credentials: true");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH');
+
+//ANDY: I have my own exception for deep in the API
+require_once(dirname(__FILE__) . '/../classes/ControllerException.php');
+
 /**
  * API framework front controller.
  * 
@@ -38,17 +51,46 @@ $request = new Request();
 if (isset($_SERVER['PATH_INFO'])) {
     $request->url_elements = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 }
-$request->method = strtoupper($_SERVER['REQUEST_METHOD']);
+
+//ANDY:  When doing credentials you get an OPTIONS request first
+$request->method = isset($_SERVER['REQUEST_METHOD'])? strtoupper($_SERVER['REQUEST_METHOD']) : 'OPTIONS';
 switch ($request->method) {
     case 'GET':
         $request->parameters = $_GET;
     break;
-    case 'POST':
-        $request->parameters = $_POST;
-    break;
+    case 'POST': //ANDY: More elaborate POST so I can handle JSON inputs, form data, and standard POSTs
+        $body = file_get_contents("php://input");
+        $content_type = false;
+        if(isset($_SERVER['CONTENT_TYPE'])) {
+            $content_type = $_SERVER['CONTENT_TYPE'];
+        }
+        switch($content_type){
+            case "application/json":
+                $body_params = json_decode($body);
+                if($body_params) {
+                    foreach($body_params as $param_name => $param_value) {
+                        $request->parameters[$param_name] = $param_value;
+                    }
+                }
+                break;
+            case "application/x-www-form-urlencoded":
+                parse_str($body, $postvars);
+                foreach($postvars as $field => $value) {
+                    $request->parameters[$field] = $value;
+                }
+                break;
+            default:
+                $request->parameters = $_POST;
+                break;
+        }
     case 'PUT':
         parse_str(file_get_contents('php://input'), $request->parameters);
     break;
+    case 'OPTIONS':
+        //no-op
+        return;
+    default:
+        $request->parameters = json_decode(file_get_contents('php://input'));
 }
 
 /**
