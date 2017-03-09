@@ -44,7 +44,7 @@ class NewsController extends AbstractController
     {
         switch (count($request->url_elements)) {
             case 1:
-                // validation should go here
+                $articles = unserialize(file_get_contents($this->articles_file));
                 $id = (count($articles) + 1);
                 $articles = $this->readArticles();
                 $article = array(

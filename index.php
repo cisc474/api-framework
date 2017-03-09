@@ -10,7 +10,7 @@ header("Access-Control-Allow-Credentials: true");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH');
 
 //ANDY: I have my own exception for deep in the API
-require_once(dirname(__FILE__) . '/../classes/ControllerException.php');
+require_once(dirname(__FILE__) . '/classes/ControllerException.php');
 
 /**
  * API framework front controller.

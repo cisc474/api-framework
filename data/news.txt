@@ -1,0 +1,1 @@
+a:2:{i:1;a:4:{s:2:"id";i:1;s:5:"title";s:12:"Test Article";s:7:"content";s:34:"Welcome to your new API framework!";s:9:"published";s:25:"2012-01-13T18:35:48+00:00";}i:2;a:4:{s:2:"id";i:2;s:5:"title";s:11:"New Article";s:7:"content";s:62:"This is a great piece about how the world is unsafe and stuff.";s:9:"published";s:25:"2017-03-09T02:38:58+00:00";}}
